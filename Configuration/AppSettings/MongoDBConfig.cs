@@ -1,4 +1,4 @@
-namespace RuletaOnline.Configuration
+namespace RuletaOnline.Configuration.AppSettings
 {
     public class MongoDBConfig
     {

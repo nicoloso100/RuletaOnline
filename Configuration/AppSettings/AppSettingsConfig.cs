@@ -1,6 +1,6 @@
-namespace RuletaOnline.Configuration
+namespace RuletaOnline.Configuration.AppSettings
 {
-    public class ServerConfig
+    public class AppSettingsConfig
     {
         public MongoDBConfig MongoDB { get; set; } = new MongoDBConfig();
     }
