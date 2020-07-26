@@ -1,6 +1,7 @@
 
 
 using RuletaOnline.Infrastructure.Repositories;
+using RuletaOnline.Objects;
 
 namespace RuletaOnline.Services
 {
@@ -11,10 +12,12 @@ namespace RuletaOnline.Services
         {
             this.rouletteRepository = rouletteRepository;
         }
-        public int CreateRoulette()
+        public long CreateRoulette()
         {
-            var rouletteId = rouletteRepository.CreateNewRoulette();
-            return rouletteId;
+            var id = rouletteRepository.GetNextId();
+            var newRoulette = new Roulette(id, RouletteStates.inactive);
+            rouletteRepository.CreateNewRoulette(newRoulette: newRoulette);
+            return newRoulette.GetId();
         }
     }
 }

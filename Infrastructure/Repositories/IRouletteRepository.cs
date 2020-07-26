@@ -1,8 +1,11 @@
+using RuletaOnline.Objects;
+
 namespace RuletaOnline.Infrastructure.Repositories
 {
     public interface IRouletteRepository
     {
-        int CreateNewRoulette();
-        void ChangeRouletteState(int rouletteId);
+        long GetNextId();
+        void CreateNewRoulette(Roulette newRoulette);
+        void ChangeRouletteState(long rouletteId);
     }
 }

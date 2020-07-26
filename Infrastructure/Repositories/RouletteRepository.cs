@@ -1,3 +1,7 @@
+using MongoDB.Bson;
+using RuletaOnline.Infrastructure.Models;
+using RuletaOnline.Objects;
+
 namespace RuletaOnline.Infrastructure.Repositories
 {
     public class RouletteRepository : IRouletteRepository
@@ -8,12 +12,22 @@ namespace RuletaOnline.Infrastructure.Repositories
             this.rouletteContext = rouletteContext;
         }
 
-        public void ChangeRouletteState(int rouletteId)
+        public long GetNextId()
         {
-            throw new System.NotImplementedException();
+            var nextId = rouletteContext.Roulettes.CountDocuments(new BsonDocument()) + 1;
+            return nextId;
+        }
+        public void CreateNewRoulette(Roulette newRoulette)
+        {
+            var roulette = new RouletteModel
+            {
+                Id = newRoulette.GetId(),
+                State = (int)newRoulette.GetState()
+            };
+            rouletteContext.Roulettes.InsertOne(roulette);
         }
 
-        public int CreateNewRoulette()
+        public void ChangeRouletteState(long rouletteId)
         {
             throw new System.NotImplementedException();
         }

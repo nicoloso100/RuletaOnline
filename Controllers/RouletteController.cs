@@ -14,7 +14,7 @@ namespace RuletaOnline.Controllers
         }
 
         [HttpPost]
-        public int CreateRoulette()
+        public long CreateRoulette()
         {
             var rouletteId = rouletteService.CreateRoulette();
             return rouletteId;
