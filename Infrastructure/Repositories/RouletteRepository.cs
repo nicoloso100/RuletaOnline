@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -21,9 +22,9 @@ namespace RuletaOnline.Infrastructure.Repositories
             var nextId = rouletteContext.Roulettes.CountDocuments(new BsonDocument()) + 1;
             return nextId;
         }
-        public Task<DTORoulette> GetRouletteById(long rouletteId)
+        public async Task<DTORoulette> GetRouletteById(long rouletteId)
         {
-            var roulette = rouletteContext.Roulettes.Find<RouletteDocument>(x => x.RouletteId == rouletteId).As<DTORoulette>().FirstOrDefaultAsync();
+            var roulette = await rouletteContext.Roulettes.Find<RouletteDocument>(x => x.RouletteId == rouletteId).As<DTORoulette>().FirstOrDefaultAsync();
             return roulette;
         }
         public void CreateNewRoulette(Roulette newRoulette)
@@ -50,7 +51,7 @@ namespace RuletaOnline.Infrastructure.Repositories
                 RouletteId = newBet.GetRouletteId(),
                 BetUser = newBet.GetUser(),
                 BetAmount = newBet.GetAmount(),
-                BetColor = (int?)newBet.GetBetColor(),
+                BetColor = newBet.GetBetColor().ToString(),
                 BetNumber = newBet.GetBetNumber()
             };
             await rouletteContext.Bets.InsertOneAsync(bet);
@@ -60,6 +61,18 @@ namespace RuletaOnline.Infrastructure.Repositories
         {
             var roulette = rouletteContext.Roulettes.Find<RouletteDocument>(x => x.RouletteId == rouletteId).As<DTORoulette>().FirstOrDefault();
             return roulette.State;
+        }
+
+        public async Task<List<DTOBet>> GetBetsByRouletteId(long rouletteId)
+        {
+            var bets = await rouletteContext.Bets.Find(x => true).As<DTOBet>().ToListAsync();
+            return bets;
+        }
+
+        public async Task<List<DTORoulette>> GetAllRoulettes()
+        {
+            var roulettes = await rouletteContext.Roulettes.Find(x => true).As<DTORoulette>().ToListAsync();
+            return roulettes;
         }
     }
 }

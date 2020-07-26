@@ -11,7 +11,7 @@ namespace RuletaOnline.Infrastructure.Documents
         public long RouletteId { get; set; }
         public string BetUser { get; set; }
         public int BetAmount { get; set; }
-        public int? BetColor { get; set; }
+        public string BetColor { get; set; }
         public int? BetNumber { get; set; }
     }
 }

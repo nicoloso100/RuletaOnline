@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RuletaOnline.DTOs;
@@ -39,10 +40,24 @@ namespace RuletaOnline.Controllers
                 user: headerUserParameter,
                 amount: bet.BetAmount,
                 betNumber: bet.BetNumber,
-                betColor: bet.BetColor
+                betColor: bet.BetColor.ToString()
             );
             await rouletteService.BetOnRoulette(newBet);
             return Ok("La apuesta se ha realizado correctamente");
+        }
+
+        [HttpPost]
+        public List<DTOBet> DisableRulette([FromBody] long rouletteId)
+        {
+            var disableAndResponseTask = rouletteService.DisableRoulette(rouletteId);
+            disableAndResponseTask.Wait();
+            return disableAndResponseTask.Result;
+        }
+
+        [HttpGet]
+        public async Task<List<DTORoulette>> GetAllRoulettes()
+        {
+            return await rouletteService.GetAllRoulettes();
         }
     }
 }
