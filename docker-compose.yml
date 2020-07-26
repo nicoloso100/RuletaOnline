@@ -1,11 +1,10 @@
-# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
-version: '3.4'
+version: "3.4"
 
 services:
-  ruletaonline:
+  ruletaonlinelocal:
     image: ruletaonline
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 80
+      - "8080:80"
