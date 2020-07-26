@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using RuletaOnline.Configuration;
 
 namespace RuletaOnline
 {
@@ -24,6 +25,8 @@ namespace RuletaOnline
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var dbConfig = new ServerConfig();
+            Configuration.Bind(dbConfig);
             services.AddControllers();
         }
 
