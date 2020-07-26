@@ -6,8 +6,9 @@ namespace RuletaOnline.Objects
     {
         long GetRouletteId();
         string GetUser();
+        int GetAmount();
         int? GetBetNumber();
         RouletteColors? GetBetColor();
-        BetTypes GetBetTypes();
+        BetTypes GetBetType();
     }
 }

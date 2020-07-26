@@ -9,9 +9,9 @@ namespace RuletaOnline.Infrastructure.Repositories
     {
         long GetNextRouletteId();
         Task<DTORoulette> GetRouletteById(long rouletteId);
-        void CreateNewRoulette(Roulette newRoulette);
-        void ModifyRoulette(Roulette newRoulette);
-        Task CreateBetOnRoulette(Bet newBet);
+        void CreateNewRoulette(IRoulette newRoulette);
+        void ModifyRoulette(IRoulette newRoulette);
+        Task CreateBetOnRoulette(IBet newBet);
         RouletteStates GetRouletteStateById(long rouletteId);
         Task<List<DTOBet>> GetBetsByRouletteId(long rouletteId);
         Task<List<DTORoulette>> GetAllRoulettes();

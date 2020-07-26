@@ -21,13 +21,15 @@ namespace RuletaOnline.Controllers
         public long CreateRoulette()
         {
             var rouletteId = rouletteService.CreateRoulette();
+
             return rouletteId;
         }
 
         [HttpPost]
         public IActionResult EnableRoulette([FromBody] long rouletteId)
         {
-            rouletteService.EnableRoulette(rouletteId);
+            rouletteService.EnableRoulette(rouletteId: rouletteId);
+
             return Ok("La ruleta se ha habilitado correctamente");
         }
 
@@ -35,22 +37,17 @@ namespace RuletaOnline.Controllers
         public async Task<IActionResult> BetOnRoulette([FromBody] DTOBet bet)
         {
             var headerUserParameter = Request.Headers["user"].ToString();
-            var newBet = new Bet(
-                rouletteId: bet.RouletteId,
-                user: headerUserParameter,
-                amount: bet.BetAmount,
-                betNumber: bet.BetNumber,
-                betColor: bet.BetColor.ToString()
-            );
-            await rouletteService.BetOnRoulette(newBet);
+            await rouletteService.BetOnRoulette(bet: bet, user: headerUserParameter);
+
             return Ok("La apuesta se ha realizado correctamente");
         }
 
         [HttpPost]
         public List<DTOBet> DisableRulette([FromBody] long rouletteId)
         {
-            var disableAndResponseTask = rouletteService.DisableRoulette(rouletteId);
+            var disableAndResponseTask = rouletteService.DisableRoulette(rouletteId: rouletteId);
             disableAndResponseTask.Wait();
+
             return disableAndResponseTask.Result;
         }
 

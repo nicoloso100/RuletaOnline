@@ -66,7 +66,7 @@ namespace RuletaOnline.Objects
             return betColor;
         }
 
-        public BetTypes GetBetTypes()
+        public BetTypes GetBetType()
         {
             if (betNumber == null && betColor != null)
                 return BetTypes.color;

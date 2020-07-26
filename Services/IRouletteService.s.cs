@@ -9,7 +9,7 @@ namespace RuletaOnline.Services
     {
         long CreateRoulette();
         void EnableRoulette(long rouletteId);
-        Task BetOnRoulette(Bet bet);
+        Task BetOnRoulette(DTOBet bet, string user);
         Task<List<DTOBet>> DisableRoulette(long rouletteId);
         Task<List<DTORoulette>> GetAllRoulettes();
     }

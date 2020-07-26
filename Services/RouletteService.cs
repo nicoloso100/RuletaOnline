@@ -19,51 +19,63 @@ namespace RuletaOnline.Services
         public long CreateRoulette()
         {
             var id = rouletteRepository.GetNextRouletteId();
-            var newRoulette = new Roulette(id, RouletteStates.inactive);
+            var newRoulette = new Roulette(id: id, state: RouletteStates.inactive);
             rouletteRepository.CreateNewRoulette(newRoulette: newRoulette);
+
             return newRoulette.GetId();
         }
 
         public void EnableRoulette(long rouletteId)
         {
-            var roulette = CheckIfRouletteExists(rouletteId);
+            var roulette = CheckIfRouletteExists(rouletteId: rouletteId);
             roulette.Wait();
             if (roulette.Result.State == RouletteStates.active)
                 throw new System.Exception("La ruleta ingresada ya se encuentra activa.");
-            var newRoulette = new Roulette(roulette.Result.RouletteId, RouletteStates.active);
-            rouletteRepository.ModifyRoulette(newRoulette);
+            var newRoulette = new Roulette(id: roulette.Result.RouletteId, state: RouletteStates.active);
+            rouletteRepository.ModifyRoulette(newRoulette: newRoulette);
         }
 
-        public Task BetOnRoulette(Bet bet)
+        public Task BetOnRoulette(DTOBet bet, string user)
         {
-            var state = rouletteRepository.GetRouletteStateById(bet.GetRouletteId());
+            var newBet = new Bet(
+                rouletteId: bet.RouletteId,
+                user: user,
+                amount: bet.BetAmount,
+                betNumber: bet.BetNumber,
+                betColor: bet.BetColor.ToString()
+            );
+            var state = rouletteRepository.GetRouletteStateById(rouletteId: newBet.GetRouletteId());
             if (state == RouletteStates.inactive)
                 throw new System.Exception("La ruleta ingresada no se encuentra activa.");
-            return rouletteRepository.CreateBetOnRoulette(bet);
+
+            return rouletteRepository.CreateBetOnRoulette(newBet: newBet);
         }
 
         public async Task<List<DTOBet>> DisableRoulette(long rouletteId)
         {
-            var roulette = await CheckIfRouletteExists(rouletteId);
+            var roulette = await CheckIfRouletteExists(rouletteId: rouletteId);
             if (roulette.State == RouletteStates.inactive)
                 throw new System.Exception("La ruleta ingresada ya se encuentra inactiva.");
-            var newRoulette = new Roulette(roulette.RouletteId, RouletteStates.inactive);
-            rouletteRepository.ModifyRoulette(newRoulette);
-            var bets = await GetRouletteSummary(rouletteId);
+            var newRoulette = new Roulette(id: roulette.RouletteId, state: RouletteStates.inactive);
+            rouletteRepository.ModifyRoulette(newRoulette: newRoulette);
+            var bets = await GetRouletteSummary(rouletteId: rouletteId);
+
             return bets;
         }
 
         private Task<List<DTOBet>> GetRouletteSummary(long rouletteId)
         {
-            var getBetsTask = rouletteRepository.GetBetsByRouletteId(rouletteId);
+            var getBetsTask = rouletteRepository.GetBetsByRouletteId(rouletteId: rouletteId);
+
             return getBetsTask;
         }
 
         private async Task<DTORoulette> CheckIfRouletteExists(long rouletteId)
         {
-            var roulette = await rouletteRepository.GetRouletteById(rouletteId);
+            var roulette = await rouletteRepository.GetRouletteById(rouletteId: rouletteId);
             if (roulette is null)
                 throw new System.Exception("No se ha encontrado la ruleta ingresada.");
+
             return roulette;
         }
 
