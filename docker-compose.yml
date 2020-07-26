@@ -1,5 +1,5 @@
 # Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
-version: '3.4'
+version: "3.4"
 
 services:
   ruletaonline:
@@ -9,3 +9,21 @@ services:
       dockerfile: Dockerfile
     ports:
       - 80
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: ruletaonlinepass
+    ports:
+      - 27017:27017
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ruletaonlinepass
+    depends_on:
+      - mongo
