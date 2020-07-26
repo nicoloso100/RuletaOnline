@@ -1,11 +1,16 @@
+using System.Threading.Tasks;
+using RuletaOnline.DTOs;
 using RuletaOnline.Objects;
 
 namespace RuletaOnline.Infrastructure.Repositories
 {
     public interface IRouletteRepository
     {
-        long GetNextId();
+        long GetNextRouletteId();
+        Task<DTORoulette> GetRouletteById(long rouletteId);
         void CreateNewRoulette(Roulette newRoulette);
-        void ChangeRouletteState(long rouletteId);
+        void ModifyRoulette(Roulette newRoulette);
+        Task CreateBetOnRoulette(Bet newBet);
+        RouletteStates GetRouletteStateById(long rouletteId);
     }
 }

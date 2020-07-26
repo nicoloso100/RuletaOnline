@@ -1,3 +1,5 @@
+using MongoDB.Bson.Serialization.Attributes;
+
 namespace RuletaOnline.Objects
 {
     public sealed class Roulette : IRoulette

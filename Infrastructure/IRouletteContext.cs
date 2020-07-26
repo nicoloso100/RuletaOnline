@@ -1,10 +1,11 @@
 using MongoDB.Driver;
-using RuletaOnline.Infrastructure.Models;
+using RuletaOnline.Infrastructure.Documents;
 
 namespace RuletaOnline.Infrastructure
 {
     public interface IRouletteContext
     {
-        IMongoCollection<RouletteModel> Roulettes { get; }
+        IMongoCollection<RouletteDocument> Roulettes { get; }
+        IMongoCollection<BetDocument> Bets { get; }
     }
 }

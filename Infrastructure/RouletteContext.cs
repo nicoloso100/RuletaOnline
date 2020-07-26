@@ -1,6 +1,6 @@
 using MongoDB.Driver;
 using RuletaOnline.Configuration;
-using RuletaOnline.Infrastructure.Models;
+using RuletaOnline.Infrastructure.Documents;
 
 namespace RuletaOnline.Infrastructure
 {
@@ -14,6 +14,7 @@ namespace RuletaOnline.Infrastructure
             _db = client.GetDatabase(config.Database);
         }
 
-        public IMongoCollection<RouletteModel> Roulettes => _db.GetCollection<RouletteModel>("Roulette");
+        public IMongoCollection<RouletteDocument> Roulettes => _db.GetCollection<RouletteDocument>("Roulette");
+        public IMongoCollection<BetDocument> Bets => _db.GetCollection<BetDocument>("Bets");
     }
 }
