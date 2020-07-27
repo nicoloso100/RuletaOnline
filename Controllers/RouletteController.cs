@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RuletaOnline.DTOs;
+using RuletaOnline.ExceptionMiddlewares;
 using RuletaOnline.Objects;
 using RuletaOnline.Services;
 
@@ -43,12 +45,11 @@ namespace RuletaOnline.Controllers
         }
 
         [HttpPost]
-        public List<DTOBet> DisableRulette([FromBody] long rouletteId)
+        public async Task<List<DTOBet>> DisableRulette([FromBody] long rouletteId)
         {
             var disableAndResponseTask = rouletteService.DisableRoulette(rouletteId: rouletteId);
-            disableAndResponseTask.Wait();
 
-            return disableAndResponseTask.Result;
+            return await disableAndResponseTask;
         }
 
         [HttpGet]

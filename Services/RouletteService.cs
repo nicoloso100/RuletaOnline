@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using RuletaOnline.DTOs;
+using RuletaOnline.ExceptionMiddlewares;
 using RuletaOnline.Infrastructure.Repositories;
 using RuletaOnline.Objects;
 
@@ -30,7 +31,7 @@ namespace RuletaOnline.Services
             var roulette = CheckIfRouletteExists(rouletteId: rouletteId);
             roulette.Wait();
             if (roulette.Result.State == RouletteStates.active)
-                throw new System.Exception("La ruleta ingresada ya se encuentra activa.");
+                throw new HttpResponseException("La ruleta ingresada ya se encuentra activa.");
             var newRoulette = new Roulette(id: roulette.Result.RouletteId, state: RouletteStates.active);
             rouletteRepository.ModifyRoulette(newRoulette: newRoulette);
         }
@@ -46,7 +47,7 @@ namespace RuletaOnline.Services
             );
             var state = rouletteRepository.GetRouletteStateById(rouletteId: newBet.GetRouletteId());
             if (state == RouletteStates.inactive)
-                throw new System.Exception("La ruleta ingresada no se encuentra activa.");
+                throw new HttpResponseException("La ruleta ingresada no se encuentra activa.");
 
             return rouletteRepository.CreateBetOnRoulette(newBet: newBet);
         }
@@ -55,7 +56,7 @@ namespace RuletaOnline.Services
         {
             var roulette = await CheckIfRouletteExists(rouletteId: rouletteId);
             if (roulette.State == RouletteStates.inactive)
-                throw new System.Exception("La ruleta ingresada ya se encuentra inactiva.");
+                throw new HttpResponseException("La ruleta ingresada ya se encuentra inactiva.");
             var newRoulette = new Roulette(id: roulette.RouletteId, state: RouletteStates.inactive);
             rouletteRepository.ModifyRoulette(newRoulette: newRoulette);
             var bets = await GetRouletteSummary(rouletteId: rouletteId);
@@ -74,7 +75,7 @@ namespace RuletaOnline.Services
         {
             var roulette = await rouletteRepository.GetRouletteById(rouletteId: rouletteId);
             if (roulette is null)
-                throw new System.Exception("No se ha encontrado la ruleta ingresada.");
+                throw new HttpResponseException("No se ha encontrado la ruleta ingresada.");
 
             return roulette;
         }

@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RuletaOnline.Configuration;
 using RuletaOnline.Configuration.AppSettings;
+using RuletaOnline.ExceptionMiddlewares;
 using RuletaOnline.Infrastructure;
 using RuletaOnline.Infrastructure.Repositories;
 using RuletaOnline.Services;
@@ -22,6 +23,7 @@ namespace RuletaOnline
 
         public void ConfigureServices(IServiceCollection services)
         {
+            ConfigureErrorMiddleware(services: services);
             ServerConfigurationInjection(services: services);
             DBContextInjection(services: services);
             RepositoriesLayerInjection(services: services);
@@ -57,10 +59,14 @@ namespace RuletaOnline
         {
             services.AddScoped<IRouletteRepository, RouletteRepository>();
         }
-
         private void ServicesLayerInjection(IServiceCollection services)
         {
             services.AddScoped<IRouletteService, RouletteService>();
+        }
+        private void ConfigureErrorMiddleware(IServiceCollection services)
+        {
+            services.AddControllers(options =>
+            options.Filters.Add(new HttpResponseExceptionFilter()));
         }
     }
 }
