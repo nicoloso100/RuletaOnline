@@ -1,13 +1,6 @@
 version: "3.4"
 
 services:
-  ruletaonlinelocal:
-    image: ruletaonline
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8080:80"
   mongo:
     image: mongo
     restart: always
@@ -16,6 +9,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ruletaonlinepass
     ports:
       - 27017:27017
+
   mongo-express:
     image: mongo-express
     restart: always
@@ -24,5 +18,15 @@ services:
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: ruletaonlinepass
+    depends_on:
+      - mongo
+
+  ruletaonlinelocal:
+    build: .
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      MongoDB__Host: mongo
     depends_on:
       - mongo
